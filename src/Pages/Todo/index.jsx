@@ -7,7 +7,7 @@ import { NewTask } from './components/NewTask'
 import { TodoCard } from './components/TodoCard'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { selectTodos, setTodos } from '../../redux/slices/todoSlice'
+import { clearData, selectTodos, setTodos } from '../../redux/slices/todoSlice'
 
 export const TodosPage = () => {
   
@@ -22,6 +22,7 @@ export const TodosPage = () => {
   const logout = () => {
     localStorage.removeItem('uid')
     goToAuth()
+    dispatch(clearData())
   }
 
   const todos = useSelector(selectTodos)
@@ -36,7 +37,6 @@ export const TodosPage = () => {
     request
       .then(res => {
         if (res.data) {
-          console.log(res.data);
           dispatch(setTodos(parseJSON(res.data)))
         }
       })

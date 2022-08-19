@@ -32,7 +32,7 @@ export const TodoCard = ({ todo }) => {
     const request = deleteTodo(localId, id)
 
     request
-      .then(res => console.log(res))
+      .then(() => console.log("successfully updated!"))
   }
 
   const onEdit = data => {

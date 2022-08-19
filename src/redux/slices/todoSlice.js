@@ -37,7 +37,6 @@ export const todosSlice = createSlice({
     },
     editTodo: (state, action) => {
       const newData = action.payload.data
-      console.log(action.payload)
       const id = action.payload.id
       state.todos = state.todos.map((todo) => {
         if (todo.id === id) {
@@ -51,13 +50,16 @@ export const todosSlice = createSlice({
         return todo
       })
     },
-    addTodo(state, action) {
+    addTodo: (state, action) => {
       state.todos = [...state.todos, action.payload]
+    },
+    clearData: state => {
+      state.todos = []
     }
   },
 })
 
-export const { setTodos, removeTodo, completeTodo, changeEditState, editTodo, addTodo } = todosSlice.actions
+export const { setTodos, removeTodo, completeTodo, changeEditState, editTodo, addTodo, clearData } = todosSlice.actions
 export const selectTodos = (state) => state.todos.todos 
 
 export default todosSlice.reducer
