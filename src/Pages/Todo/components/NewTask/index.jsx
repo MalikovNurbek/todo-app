@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, FormControl, Input, FormErrorMessage, Textarea } from '@chakra-ui/react'
+import { Box, Button, Container, Flex, FormControl, Input, FormErrorMessage, Textarea, FormLabel } from '@chakra-ui/react'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
@@ -8,24 +8,28 @@ import { addTodo, setTodos } from '../../../../redux/slices/todoSlice'
 export const NewTask = () => {
 
   const localId = localStorage.getItem('uid')
-
+  const [isLoading, setIsloading] = React.useState(false)
   const {
-    register, 
-    handleSubmit, 
+    register,
+    handleSubmit,
     formState: {
-      errors
+      errors,
     },
-    reset
+    reset,
   } = useForm()
 
   const dispatch = useDispatch()
 
-  const onSumbit = (data) => {
-  const todoId = Date.now() 
+  const onSubmit = (data) => {
+    reset({
+      title: '',
+      des: '',
+    })
+    const todoId = Date.now()
 
     const newData = {
       ...data,
-      editState: false,  
+      editState: false,
       completed: false,
       date: new Date().toLocaleString(),
       id: todoId,
@@ -33,32 +37,30 @@ export const NewTask = () => {
     dispatch(addTodo(newData))
 
     const request = createTodo(newData, localId, todoId)
-
+    setIsloading(true)
     request
-      .then(() => {
-        reset({
-          title: '',
-          des: '',
-        })
-      })
       .then(() => {
         const request = getTodos(localId)
 
         request
           .then(res => dispatch(setTodos(parseJSON(res.data))))
       })
+      .finally(() => setIsloading(false))
   }
 
   return (
-    <Container borderWidth='1px' borderRadius='lg' m="3% auto" bg="#fff">
-      <Flex flexDirection='column'>
+    <Container borderWidth="1px" borderRadius="lg" m="3% auto" bg="#fff">
+      <form onSubmit={handleSubmit(onSubmit)}>
+      <Flex flexDirection="column">
         <Box fontSize="24px" fontWeight="bold" textAlign="center" my="15px">Create new task</Box>
 
       <FormControl fontSize={20} my="10px" isInvalid={!!errors.title}>
-            <Input 
+            <FormLabel>Заголовок задач*</FormLabel>
+            <Input
+              disabled={isLoading}
               placeholder="Title"
               {...register('title', {
-                required: 'Обязательное поле'
+                required: 'Обязательное поле',
               })}
             />
             <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
@@ -66,15 +68,22 @@ export const NewTask = () => {
 
         <FormControl mb="10px" isInvalid={!!errors.des}>
             <Textarea
+              disabled={isLoading}
               placeholder="Description"
               {...register('des')}
             />
             <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
           </FormControl>
 
-        <Button  my='10px' colorScheme="blue" onClick={handleSubmit(onSumbit)}>New task</Button>
+        <Button
+          my="10px"
+          colorScheme="blue"
+          disabled={isLoading}
+          onClick={handleSubmit(onSubmit)}
+        >New task</Button>
 
       </Flex>
+      </form>
     </Container>
   )
 }

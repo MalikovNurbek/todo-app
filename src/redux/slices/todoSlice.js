@@ -55,11 +55,10 @@ export const todosSlice = createSlice({
     },
     clearData: state => {
       state.todos = []
-    }
+    },
   },
 })
 
 export const { setTodos, removeTodo, completeTodo, changeEditState, editTodo, addTodo, clearData } = todosSlice.actions
-export const selectTodos = (state) => state.todos.todos 
-
+export const selectTodos = (state) => state.todos.todos
 export default todosSlice.reducer

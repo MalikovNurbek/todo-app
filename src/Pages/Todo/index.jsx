@@ -1,4 +1,4 @@
-import {  Button, Flex } from '@chakra-ui/react'
+import { Button, Flex } from '@chakra-ui/react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getTodos } from '../../api'
@@ -10,12 +10,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { clearData, selectTodos, setTodos } from '../../redux/slices/todoSlice'
 
 export const TodosPage = () => {
-  
+
   const localId = localStorage.getItem('uid')
   // const [todos, setTodos] = React.useState([])
 
 
-  
+
   const navigate = useNavigate()
   const goToAuth = () => navigate('/')
 
@@ -28,7 +28,7 @@ export const TodosPage = () => {
   const todos = useSelector(selectTodos)
 
   const dispatch = useDispatch()
-  
+
 
 
   React.useEffect(() => {
@@ -43,7 +43,7 @@ export const TodosPage = () => {
   }, [dispatch, localId])
 
 
-   
+
   if (!localId) return goToAuth()
 
 
@@ -52,17 +52,17 @@ export const TodosPage = () => {
       <Button variant="solid" colorScheme="red" onClick={logout}>logout</Button>
 
 
-      <NewTask setTodos={setTodos}/>
+      <NewTask setTodos={setTodos} />
 
       <Flex gap={10} p="20px 3%" flexWrap="wrap" align="flex-start" justify="stretch">
         {
           todos ? todos.map(todo => (
-            <TodoCard todo={todo} key={todo.id} setTodos={setTodos}/>
+            <TodoCard todo={todo} key={todo.id} setTodos={setTodos} />
           )).reverse() : (<h1>У вас нет актуальных задач.</h1>)
         }
       </Flex>
 
-      
+
     </div>
   )
 }

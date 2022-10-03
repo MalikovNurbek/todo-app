@@ -13,7 +13,7 @@ root.render(
     <ChakraProvider>
         <Router>
           <App />
-        </Router> 
+        </Router>
     </ChakraProvider>
-  </Provider>
+  </Provider>,
 )

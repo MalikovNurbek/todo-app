@@ -25,7 +25,7 @@ export const useAuth = () => {
 
     request
       .then(() => onClose())
-      
+
   }
 
 

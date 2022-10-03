@@ -1,8 +1,8 @@
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react'
+import { Button, FormControl, FormErrorMessage, FormLabel, IconButton, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from './hooks/UseAuth'
-
+import { FcGoogle } from 'react-icons/fc'
 
 export const Auth = () => {
   const isAuth = localStorage.getItem('uid')
@@ -40,7 +40,9 @@ export const Auth = () => {
           userId: tokenResponse.localId,
           photoUrl: tokenResponse.photoUrl,
         })
-        if (isNewUser) return onOpen()
+        if (isNewUser) {
+          return onOpen()
+        }
         const userId = user.uid
         localStorage.setItem('uid', userId)
         const isRegisteredUser = users?.find(item => item.userId === userId)
@@ -53,12 +55,11 @@ export const Auth = () => {
   }
 
 
-
   const onSubmit = (data) => {
 
     const newData = {
       ...user,
-      login: data.login
+      login: data.login,
     }
 
     const isUnique = !!users?.find(({ login }) => login === data.login)
@@ -66,7 +67,7 @@ export const Auth = () => {
     if (isUnique) {
       return setError('login', {
         type: 'validate',
-        message: 'Такой логин уже существует!'
+        message: 'Такой логин уже существует!',
       })
     }
     postData(newData, newData.userId, onClose)
@@ -78,12 +79,13 @@ export const Auth = () => {
 
   if (isAuth) return goToTodos()
 
-
-  return ( 
+  return (
     <>
-      <div className='text-center'>
-        <Button my='10px' onClick={onAuth}>Click me!</Button> <br />
-
+      <div className="text-center w-full h-screen flex items-center justify-center flex-col">
+        <div className="p-8 rounded bg-slate-700">
+          <Text className="text-3xl text-white mb-6">Приветствую тебя! <br /> Зайди в свой аккаунт и начинай планировку задач!</Text>
+          <IconButton onClick={onAuth} icon={<FcGoogle size={80} />} size={80} />
+        </div>
       </div>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -95,9 +97,9 @@ export const Auth = () => {
             <FormControl isInvalid={!!errors.login}>
               <FormLabel>Ваш логин</FormLabel>
               <Input
-                placeholder='Логин'
+                placeholder="Логин"
                 {...register('login', {
-                  required: "Обязательное поле!"
+                  required: 'Обязательное поле!',
                 })}
               />
               <FormErrorMessage>{errors.login?.message}</FormErrorMessage>
@@ -110,7 +112,7 @@ export const Auth = () => {
               Close
             </Button>
             <Button
-              colorScheme='blue'
+              colorScheme="blue"
               onClick={handleSubmit(onSubmit)}
             >Зарегистрироваться</Button>
           </ModalFooter>
